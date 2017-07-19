@@ -43,16 +43,36 @@ public:
 	itkTypeMacro(EdgeDetectionFilter, itk::ImageToImagefilter);
 
 	//accessors
-	void SetLowerThreshold(typename TImage::PixelType l) { m_lower_threshold = l; }
-	void SetUpperThreshold(typename TImage::PixelType u) { m_upper_threshold = u; }
-	void SetVariance(double v) { m_variance = v; }
-	void SetAutomaticThresholdingOn () { m_automatic_thresholding = true; }
-	void SetAutomaticThresholdingOff () { m_automatic_thresholding = false; }
+	void SetLowerThreshold(typename TImage::PixelType l) { 
+		this->Modified();
+		m_lower_threshold = l; 
+	}
+	
+	void SetUpperThreshold(typename TImage::PixelType u) { 
+		this->Modified();
+		m_upper_threshold = u; 
+	}
+	
+	void SetVariance(double v) { 
+		this->Modified();
+		m_variance = v; 
+	}
+	
+	void SetAutomaticThresholdingOn () { 
+		this->Modified();
+		m_automatic_thresholding = true; 
+	}
+	
+	void SetAutomaticThresholdingOff () { 
+		this->Modified();
+		m_automatic_thresholding = false; 
+	}
 
 	typename TImage::PixelType GetLowerThreshold() { return m_lower_threshold; }
 	typename TImage::PixelType GetUpperThreshold() { return m_upper_threshold; }
 	double GetVariance() { return m_variance; }
 	bool GetAutomaticthresholding () { return m_automatic_thresholding;}
+
 protected:
 	EdgeDetectionFilter(){}
 	~EdgeDetectionFilter(){}
