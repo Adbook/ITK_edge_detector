@@ -7,7 +7,7 @@
 #include "edge_detection_filter.h"
 
 
-#include "mainCLP.h"
+#include "main_cliCLP.h"
 
 int main(int argc, char **argv)
 {
