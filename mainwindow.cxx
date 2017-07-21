@@ -102,18 +102,19 @@ void MainWindow::choose_input_file()
 	}
 
 	//update necessary to get the size of the input image. 
+	m_reader->UpdateLargestPossibleRegion();
     m_reader->Update();
 
 
     //vtk widget resizing
     InputImageType::SizeType size = m_reader->GetOutput()->GetLargestPossibleRegion().GetSize();
 
+    //display
+    updateVTKWidget();
+
     ui->widget->setFixedSize(pic.size());
     //window resizing to smallest possible size
     this->resize(minimumSizeHint());
-
-    //display
-    updateVTKWidget();
 
 }
 
