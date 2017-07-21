@@ -9,7 +9,7 @@
 	</description>
 
 
-	<parameters>
+	<parameters> 
 		<label>IO</label>
 		<image>
 			<name>inputPicture</name>

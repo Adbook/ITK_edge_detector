@@ -4,19 +4,7 @@
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainWindow), m_input_set(false), m_output_set(false), m_timer_timed_out(true)
 {
 	ui->setupUi(this);
-	
-	//m_VTKwidget = new QVTKWidget(this);
-	//m_VTKwidget->resize(256, 256);
 	ui->widget->resize(256, 256);
-	/*vtkPNGReader *reader = vtkPNGReader::New();
-	reader->SetFileName("../data/input_slice.png");
-	//printsize(reader, 1);
-
-	vtkImageViewer *viewer = vtkImageViewer::New();
-	viewer->SetInputConnection(reader->GetOutputPort());
-	viewer->SetColorLevel(128);
-	viewer->SetColorWindow(256);
-*/
 	
 
 
@@ -27,7 +15,6 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainW
 
 	ui->input_label->setText("Please choose an input picture");
 
-	//ui->top_layout->addWidget(m_VTKwidget);
 	//buttons
 	connect(ui->button_input, SIGNAL(clicked(bool)), this, SLOT(choose_input_file()));
 	connect(ui->button_output, SIGNAL(clicked(bool)), this, SLOT(choose_output_file()));

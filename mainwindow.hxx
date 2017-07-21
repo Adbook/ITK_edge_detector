@@ -8,26 +8,20 @@
 #include <iostream>
 
 
-#include "itkImage.h"
+#include <itkImage.h>
 #include <itkImageFileWriter.h>
 #include <itkImportImageFilter.h>
 #include <itkImageFileReader.h>
 #include <itkCastImageFilter.h>
 #include <itkImageToVTKImageFilter.h>
-#include <itkVTKImageIO.h>
-//#include <Q4VTKWidgetPlugin.h>
-#include <vtkPNGReader.h>
+
 #include <vtkImageViewer.h>
 #include <vtkRenderWindow.h>
-#include <vtkRenderer.h>
 #include <vtkImageData.h>
-#include <vtkCamera.h>
 #include <vtkImageFlip.h>
-#include <vtkImageActor.h>
-#include <vtkImageMapper3D.h>
+
 #include "edge_detection_filter.h"
 
-//#include 
 namespace Ui{
 	class MainWindow;
 }
@@ -73,7 +67,6 @@ private:
     FilterType::Pointer m_filter;
 
     vtkImageFlip *imageFlip;
- //   QVTKWidget * m_VTKwidget;
 
     QTimer *m_timer;
 
