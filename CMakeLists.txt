@@ -4,7 +4,7 @@ if(COMMAND cmake_policy)
     cmake_policy(SET CMP0003 NEW)
 endif(COMMAND cmake_policy)
 
-#enable_testing()
+
 
 set(CMAKE_CXX_FLAGS -std=c++0x)
 
@@ -25,7 +25,12 @@ main_cli.cxx
 SEMMacroBuildCLI(
 NAME main_cli
 TARGET_LIBRARIES ${ITK_LIBRARIES}
+FOLDER essai
 )
+
+### TESTS ####
+enable_testing()
+add_subdirectory(test)
 
 
 ### GUI project ###

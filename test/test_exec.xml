@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<executable>
+	<category>Testing</category>
+	<title>Edge detection tests</title>
+	<description>
+		Applies the edge detection fitler on an input image, and compares it to the expected result
+	</description>
+
+
+	<parameters> 
+		<label>IO</label>
+		<image>
+			<name>inputPicture</name>
+			<label>Input Picture</label>
+			<channel>input</channel>
+			<index>0</index>
+			<description>Input image path</description>
+		</image>
+		<image>
+			<name>resultPicture</name>
+			<label>Expected Result</label>
+			<channel>input</channel>
+			<index>1</index>
+			<description>Expected result image path</description>
+		</image>
+	</parameters>
+	<parameters>
+		<label>Parameters</label>
+		<float>
+			<name>variance</name>
+			<flag>v</flag>
+			<longflag>variance</longflag>
+			<default>1.5</default>
+			<description>Variance for the Gaussian Filter</description>
+		</float>
+		<integer>
+			<name>upperThresh</name>
+			<longflag>upperthresh</longflag>
+			<default>-1</default>
+			<description>Upper threshold for the binarization. Note: for manual thresholding, both upper and lower thresholds are required</description>
+		</integer>
+		<integer>
+			<name>lowerThresh</name>
+			<longflag>lowerthresh</longflag>
+			<default>-1</default>
+			<description>Lower threshold for the binarization. Note: for manual thresholding, both upper and lower thresholds are required</description>
+		</integer>
+	</parameters>
+
+
+
+</executable>
