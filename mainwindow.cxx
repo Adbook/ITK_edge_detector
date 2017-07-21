@@ -12,18 +12,17 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainW
 	ui->button_save->setEnabled(false);
 	ui->sb_upperthresh->setEnabled(false);
 	ui->sb_lowerthresh->setEnabled(false);
+	ui->sb_variance->setEnabled(false);
 
 	ui->input_label->setText("Please choose an input picture");
 
-	//buttons
+	//signal / slot connections
 	connect(ui->button_input, SIGNAL(clicked(bool)), this, SLOT(choose_input_file()));
 	connect(ui->button_output, SIGNAL(clicked(bool)), this, SLOT(choose_output_file()));
 	connect(ui->button_save, SIGNAL(clicked(bool)), this, SLOT(save_output()));
-	//spinboxes (number inputs)
 	connect(ui->sb_variance, SIGNAL(valueChanged(double)), this, SLOT(update_variance()));
 	connect(ui->sb_upperthresh, SIGNAL(valueChanged(double)), this, SLOT(update_upper_thresh()));
 	connect(ui->sb_lowerthresh, SIGNAL(valueChanged(double)), this, SLOT(update_lower_thresh()));
-	//checkbox
 	connect(ui->checkbox_autothreshold, SIGNAL(stateChanged(int)), this, SLOT(toggle_auto_threshold()));
 
 
@@ -40,18 +39,20 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainW
 	
 	//process configuration
 	m_filter->SetInput(m_reader->GetOutput());
-	m_cast_filter->SetInput(m_filter->GetOutput());
 	m_itk_to_vtk_filter->SetInput(m_filter->GetOutput());
+
+	m_cast_filter->SetInput(m_filter->GetOutput());
 	m_writer->SetInput(m_cast_filter->GetOutput());
 	
-	//vtk image viewer creation and configuration
-	vtkImageViewer *viewer = vtkImageViewer::New();
 
+	//flipping the vtk image
 	imageFlip = vtkImageFlip::New();
 	imageFlip->SetFilteredAxis(1);
 	imageFlip->SetInputData(m_itk_to_vtk_filter->GetOutput());
-	viewer->SetInputData(imageFlip->GetOutput());	
 
+	//vtk image viewer creation and configuration
+	vtkImageViewer *viewer = vtkImageViewer::New();
+	viewer->SetInputData(imageFlip->GetOutput());	
 	viewer->SetColorLevel(128);
 	viewer->SetColorWindow(256);
 	
@@ -64,9 +65,9 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainW
 	//QTimer configuration, timeout used to limit writes
 	m_timer = new QTimer();
 	connect(m_timer, SIGNAL(timeout()), this, SLOT(timeout()));
-	m_timer->start(500);
+	m_timer->start(1000);
 
-	if(!m_input_set) ui->widget->setEnabled(false);
+	//window resizing
 	this->resize(minimumSizeHint());
 
 }
@@ -99,6 +100,7 @@ void MainWindow::choose_input_file()
     	ui->button_output->setEnabled(true);
     	ui->widget->setEnabled(true);
     	m_input_set = true;
+    	ui->sb_variance->setEnabled(true);
 	}
 
 	//update necessary to get the size of the input image. 

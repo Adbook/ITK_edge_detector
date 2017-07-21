@@ -35,7 +35,6 @@ void EdgeDetectionFilter<TImage>::GenerateData(){
 	this->AllocateOutputs();
 
 	//edge detection
-
 	ReduceNoise(input, denoised_image);
 	ComputeGradients(denoised_image, edge_gradient, edge_angle);
 	RemoveNonMaximums(edge_gradient, edge_angle, max_edges);
@@ -49,7 +48,6 @@ void EdgeDetectionFilter<TImage>::GenerateData(){
 
 template<typename TImage>
 void EdgeDetectionFilter<TImage>::GenerateOffsetVector(std::vector< typename itk::NeighborhoodIterator<TImage>::OffsetType > &v){
-
 		v.push_back(typename itk::NeighborhoodIterator<TImage>::OffsetType  {0, -1});
 		v.push_back(typename itk::NeighborhoodIterator<TImage>::OffsetType  {1, -1});
 		v.push_back(typename itk::NeighborhoodIterator<TImage>::OffsetType  {1, 0});
@@ -58,7 +56,6 @@ void EdgeDetectionFilter<TImage>::GenerateOffsetVector(std::vector< typename itk
 		v.push_back(typename itk::NeighborhoodIterator<TImage>::OffsetType  {-1, 1});
 		v.push_back(typename itk::NeighborhoodIterator<TImage>::OffsetType  {-1, 0});
 		v.push_back(typename itk::NeighborhoodIterator<TImage>::OffsetType  {-1, -1});
-
 }
 
 /** Denoising **/
@@ -338,7 +335,7 @@ void EdgeDetectionFilter<TImage>::ComputeThreshold (typename TImage::Pointer inp
 	typename HistogramFilterType::Pointer filter = HistogramFilterType::New();
 	const unsigned int numberOfComponents = 1;
 	typename HistogramType::SizeType size (numberOfComponents);
-	size.Fill(maxVal); //TODO: too big
+	size.Fill(maxVal); //TODO: too big, though ok for 8bit
 
 	filter->SetInput(adaptor);
 	filter->SetHistogramSize(size);

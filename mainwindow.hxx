@@ -60,6 +60,7 @@ private:
                                     CastFilterType;
     typedef itk::ImageToVTKImageFilter <InputImageType> ITKToVTKFilterType;                                 
 
+    //itk pointers
     ImageReaderType::Pointer m_reader;
     ImageWriterType::Pointer m_writer;
     CastFilterType::Pointer m_cast_filter;
@@ -74,8 +75,8 @@ private:
     bool m_output_set;
     bool m_timer_timed_out;
 
-    void updateVTKWidget();
 
+    void updateVTKWidget();
 };
 
 
