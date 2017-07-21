@@ -20,8 +20,9 @@
 #include <vtkImageViewer.h>
 #include <vtkRenderWindow.h>
 #include <vtkRenderer.h>
-
+#include <vtkImageData.h>
 #include <vtkCamera.h>
+#include <vtkImageFlip.h>
 #include <vtkImageActor.h>
 #include <vtkImageMapper3D.h>
 #include "edge_detection_filter.h"
@@ -71,6 +72,7 @@ private:
 	ITKToVTKFilterType::Pointer m_itk_to_vtk_filter;
     FilterType::Pointer m_filter;
 
+    vtkImageFlip *imageFlip;
  //   QVTKWidget * m_VTKwidget;
 
     QTimer *m_timer;

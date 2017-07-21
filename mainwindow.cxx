@@ -59,17 +59,15 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainW
 	
 	//vtk image viewer creation and configuration
 	vtkImageViewer *viewer = vtkImageViewer::New();
-	viewer->SetInputData(m_itk_to_vtk_filter->GetOutput());
+
+	imageFlip = vtkImageFlip::New();
+	imageFlip->SetFilteredAxis(1);
+	imageFlip->SetInputData(m_itk_to_vtk_filter->GetOutput());
+	viewer->SetInputData(imageFlip->GetOutput());	
+
 	viewer->SetColorLevel(128);
 	viewer->SetColorWindow(256);
 	
-
-	vtkCamera * cam = viewer->GetRenderer()->GetActiveCamera();
-	cam->SetFocalPoint (0, 0, 0);
-	cam->SetPosition   (0, 0, -1); // Camera in Z so it display XY planes. 
-	cam->SetViewUp     (-1, 0, 0); // Up direction is the X not the y.  
-	cam->Roll(1.1);
-//	viewer->GetRenderer()->ResetCamera( );
 	//vtk render window creation and configuration
 	vtkRenderWindow *renderWindow = viewer->GetRenderWindow();
 	
@@ -79,7 +77,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent), ui(new Ui::MainW
 	//QTimer configuration, timeout used to limit writes
 	m_timer = new QTimer();
 	connect(m_timer, SIGNAL(timeout()), this, SLOT(timeout()));
-	m_timer->start(1000);
+	m_timer->start(500);
 
 	if(!m_input_set) ui->widget->setEnabled(false);
 	this->resize(minimumSizeHint());
@@ -108,6 +106,7 @@ void MainWindow::choose_input_file()
     QPixmap pic (filename);
     ui->input_label->setPixmap(pic);
     m_reader->SetFileName(filename.toStdString());
+
     
     if(!m_input_set){
     	ui->button_output->setEnabled(true);
@@ -117,9 +116,11 @@ void MainWindow::choose_input_file()
 
 	//update necessary to get the size of the input image. 
     m_reader->Update();
-    
+
+
     //vtk widget resizing
     InputImageType::SizeType size = m_reader->GetOutput()->GetLargestPossibleRegion().GetSize();
+
     ui->widget->setFixedSize(pic.size());
     //window resizing to smallest possible size
     this->resize(minimumSizeHint());
@@ -148,12 +149,15 @@ void MainWindow::updateVTKWidget()
 	m_timer_timed_out = false;
 
 	try {
+			
 			m_itk_to_vtk_filter->Update();
+			imageFlip->Update();
 	}catch(itk::ExceptionObject & err)
 	{
 	    std::cerr << "Exception Caught while processing\n";
 	    std::cerr << err << std::endl;
 	}
+
 	ui->widget->GetRenderWindow()->Render();
 }
 
