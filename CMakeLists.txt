@@ -1,5 +1,9 @@
 project(main)
 
+if(COMMAND cmake_policy)
+    cmake_policy(SET CMP0003 NEW)
+endif(COMMAND cmake_policy)
+
 #enable_testing()
 
 #set (CMAKE_CXX_STANDARD 11)
@@ -15,7 +19,7 @@ find_package(ITK REQUIRED)
 include(${ITK_USE_FILE})
 
 
-### SEM project ###
+### CLI project ###
 set(CLI_SOURCES 
 main_cli.cxx
 )
@@ -25,16 +29,23 @@ NAME main_cli
 TARGET_LIBRARIES ${ITK_LIBRARIES}
 )
 
-add_executable(cli_exec ${CLI_SOURCES})
-target_link_libraries(cli_exec ${ITK_LIBRARIES})
 
-### Qt project ###
+### GUI project ###
+set(VTK_DIR /work/boucaud/VTK/vtk_build)
+find_package(VTK REQUIRED)
+include(${VTK_USE_FILE})
 
-set(QT_DIR /work/boucaud/Qt/Qt_4.8.6_build)
-find_package( Qt4 REQUIRED )
-include( ${QT_USE_FILE} )
-add_definitions( ${QT_DEFINITIONS} )
+
+set(QT_USE_QTDESIGNER TRUE)
+find_package(Qt4 REQUIRED)
+include(${QT_USE_FILE})
+
+
+#add_definitions( ${QT_DEFINITIONS} )
+
 include_directories( ${CMAKE_BINARY_DIR} )
+
+#MARK_AS_ADVANCED(QT_QMAKE_EXECUTABLE)
 
 
 
@@ -55,10 +66,23 @@ set ( RESOURCES
 # main.qrc
 )
 
+
+
 # using Qt meta-system (precompiler)
-QT4_ADD_RESOURCES( RES_SOURCES ${RESOURCES} )
+#QT4_ADD_RESOURCES( RES_SOURCES ${RESOURCES} )
 QT4_WRAP_UI( UI_HEADERS ${UIS} )
 QT4_WRAP_CPP( MOC_SRCS ${MOC_HEADERS} )
 
 add_executable(gui_exec ${GUI_SOURCES} ${MOC_SRCS} ${RES_SOURCES} ${UI_HEADERS})
-target_link_libraries(gui_exec ${ITK_LIBRARIES} ${QT_LIBRARIES})
+#target_link_libraries(gui_exec ${ITK_LIBRARIES} ${QT_LIBRARIES} ${VTK_LIBRARIES} QVTK)
+
+  if(VTK_LIBRARIES)
+    if(${VTK_VERSION} VERSION_LESS "6")
+      target_link_libraries(gui_exec ${ITK_LIBRARIES} ${VTK_LIBRARIES} QVTK)
+    else()
+      target_link_libraries(gui_exec ${ITK_LIBRARIES} ${VTK_LIBRARIES})
+    endif()
+  else()
+    target_link_libraries(gui_exec vtkHybrid QVTK vtkViews ${QT_LIBRARIES} ${ITK_LIBRARIES})
+  endif()
+endif()

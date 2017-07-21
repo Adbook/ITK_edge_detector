@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QString>
+#include <QTimer>
 #include <iostream>
 
 
@@ -12,6 +13,17 @@
 #include <itkImportImageFilter.h>
 #include <itkImageFileReader.h>
 #include <itkCastImageFilter.h>
+#include <itkImageToVTKImageFilter.h>
+#include <itkVTKImageIO.h>
+//#include <Q4VTKWidgetPlugin.h>
+#include <vtkPNGReader.h>
+#include <vtkImageViewer.h>
+#include <vtkRenderWindow.h>
+#include <vtkRenderer.h>
+
+#include <vtkCamera.h>
+#include <vtkImageActor.h>
+#include <vtkImageMapper3D.h>
 #include "edge_detection_filter.h"
 
 //#include 
@@ -34,6 +46,8 @@ protected slots:
 	void toggle_auto_threshold();
 	void update_upper_thresh();
 	void update_lower_thresh();
+	void timeout();
+	//todo: quit
 private:
 	Ui::MainWindow *ui;
 
@@ -49,15 +63,23 @@ private:
     typedef itk::CastImageFilter<   itk::Image<InputPixelType,2>,
                                     itk::Image<OutputPixelType,2> >
                                     CastFilterType;
+    typedef itk::ImageToVTKImageFilter <InputImageType> ITKToVTKFilterType;                                 
 
     ImageReaderType::Pointer m_reader;
     ImageWriterType::Pointer m_writer;
     CastFilterType::Pointer m_cast_filter;
+	ITKToVTKFilterType::Pointer m_itk_to_vtk_filter;
     FilterType::Pointer m_filter;
+
+ //   QVTKWidget * m_VTKwidget;
+
+    QTimer *m_timer;
 
     bool m_input_set;
     bool m_output_set;
+    bool m_timer_timed_out;
 
+    void updateVTKWidget();
 
 };
 
